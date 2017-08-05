@@ -1,0 +1,8 @@
+dofile('1_abs.lua')
+dofile('2_smoothabs.lua')
+dofile('3_MSE.lua')
+--Train_Error = torch.ones(epoch,3)
+--Valid_Error = torch.ones(epoch,3)
+--gnuplot.plot({Train_Error[{{},{1}}]},{Train_Error[{{},{2}}]},{Train_Error[{{},{3}}]})
+gnuplot.plot({'Abs',Train_Error[{{},{1}}]},{'AbsSmooth',Train_Error[{{},{2}}]},{'MSE',Train_Error[{{},{3}}]},{'Abs_valid',Valid_Error[{{},{1}}]},{'AbsSmooth_valid',Valid_Error[{{},{2}}]},{'MSE_valid',Valid_Error[{{},{3}}]})
+--gnuplot.plot({'Abs',Valid_Error[{{},{1}}]},{'AbsSmooth',Valid_Error[{{},{2}}]},{'MSE',Valid_Error[{{},{3}}]})

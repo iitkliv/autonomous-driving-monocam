@@ -1,0 +1,12 @@
+*~
+
+*.png
+*.jpg
+*.pkl
+*.tar.gz
+*.meta
+*.html
+data/
+
+*.ipynb_checkpoints
+
