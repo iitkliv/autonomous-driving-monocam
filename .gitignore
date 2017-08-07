@@ -3,6 +3,7 @@
 *.png
 *.jpg
 *.pkl
+*.pth
 *.tar.gz
 *.meta
 *.html
