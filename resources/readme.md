@@ -8,7 +8,7 @@
 #### Papers
 - [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf)
 - [Feature Analysis and Selection for Training an End-to-End Autonomous Vehicle Controller Using the Deep Learning Approach](https://arxiv.org/pdf/1703.09744.pdf)
-
+- [SAD-GAN](https://arxiv.org/abs/1611.08788)
 
 #### Related Github Repos / Implementations
 - [Navoshta Blog](https://navoshta.com/end-to-end-deep-learning/)
