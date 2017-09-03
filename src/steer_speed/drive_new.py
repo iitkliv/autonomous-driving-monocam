@@ -47,8 +47,8 @@ class PIDController:
 
 
 controller = PIDController(0.1, 0.002)
-set_speed = 6
-controller.set_desired(set_speed)
+set_average_speed = 6
+#controller.set_desired(set_speed)
 
 
 @sio.on('telemetry')
@@ -66,15 +66,15 @@ def telemetry(sid, data):
         image_array = np.asarray(image)
         transformed_image_array = image_array[None, :, :, :]
 
-        # 160x320 to 16x32. For bigger model use bigger scale
-        #resized = (cv2.resize((cv2.cvtColor(transformed_image_array[0], 
-        #	                   cv2.COLOR_RGB2HSV))[:,:,1],(32,16))).reshape(1,16,32,1)
+        params = model.predict(transformed_image_array, batch_size=1)
+        steering_angle = float(params[0, 0])
+        speed_factor = float(params[0, 1])
+
+        controller.set_desired(set_average_speed * speed_factor)
         
-        #steering_angle = float(model.predict(resized, batch_size=1))
-        steering_angle = float(model.predict(transformed_image_array, batch_size=1))
         throttle = controller.update(float(speed))
 
-        print(steering_angle, throttle)
+        print(steering_angle, speed_factor, throttle)
         send_control(steering_angle, throttle)
 
         # save frame
