@@ -46,7 +46,7 @@ class PIDController:
         return self.Kp * self.error + self.Ki * self.integral
 
 
-controller = PIDController(0.1, 0.002)
+controller = PIDController(0.2, 0.002)
 set_speed = 6
 controller.set_desired(set_speed)
 
