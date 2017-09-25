@@ -22,8 +22,9 @@ from keras import __version__ as keras_version
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
-prev_image_array = None
 
+seq_images = []
+seq_len = 30
 
 class PIDController:
     def __init__(self, Kp, Ki):
@@ -64,24 +65,31 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
-        transformed_image_array = image_array[None, :, :, :]
-
-        # 160x320 to 16x32. For bigger model use bigger scale
-        #resized = (cv2.resize((cv2.cvtColor(transformed_image_array[0], 
-        #	                   cv2.COLOR_RGB2HSV))[:,:,1],(32,16))).reshape(1,16,32,1)
         
-        #steering_angle = float(model.predict(resized, batch_size=1))
-        steering_angle = float(model.predict(transformed_image_array, batch_size=1))
-        throttle = controller.update(float(speed))
+        if len(seq_images) < seq_len:
+            seq_images.append(image_array)
+            throttle = controller.update(float(speed))
+            print(steering_angle, throttle)
+            send_control(steering_angle, throttle)
+        
+        else:
+            seq_images.pop(0)
+            seq_images.append(image_array)
 
-        print(steering_angle, throttle)
-        send_control(steering_angle, throttle)
+            transformed_image_array = np.array(seq_images)
+            transformed_image_array = transformed_image_array[None, :, :, :, :]
 
-        # save frame
-        if args.image_folder != '':
-            timestamp = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]
-            image_filename = os.path.join(args.image_folder, timestamp)
-            image.save('{}.jpg'.format(image_filename))
+            steering_angle = float(model.predict(transformed_image_array, batch_size=1))
+            throttle = controller.update(float(speed))
+
+            print(steering_angle[-1], throttle)
+            send_control(steering_angle[-1], throttle)
+
+            # save frame
+            if args.image_folder != '':
+                timestamp = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]
+                image_filename = os.path.join(args.image_folder, timestamp)
+                image.save('{}.jpg'.format(image_filename))
     else:
         # NOTE: DON'T EDIT THIS.
         sio.emit('manual', data={}, skip_sid=True)
