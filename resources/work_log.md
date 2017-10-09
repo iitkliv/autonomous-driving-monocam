@@ -35,5 +35,14 @@ The validation loss continuously increases even when the training loss drops. So
 Still tried to infer the model. Car looses off the track quite early. Moreover, the speed doesn't vary as it should.
 
 
+[25th Sept] Steer variable is only trained. Rnn part was trained after extracting feature vector of size 64 from each image, and later was cascaded with CNN to train RCNN. The training curves were good, but testing on simulator is not performning very well. I can see it gives negative values even when its turning too left. Also, its not able to better recover from when completely deviated. So I think the training data should have more samples of how to recover and also turning positive turns. Also, its not able to do anything on the second track. That is, its not able to generalize.
+
+I have trained rnn part of steer speed. I don't know how much loss to expect, but the loss is decreasing. One doubt I have to clear is given the output variable range, what loss to expect to judge that loss is close.
+
 #ToDo
-Train tf version of video prediction
+1. Clean training data. negative values in between many positive values should be truncated. Use some kernal, to smoothen the variable.
+2. Add training data pertaining to recovery of vehicle when deviated too much. 
+3. Train CNN RNN of steer only till best results are obtained
+4. Cant train for speed, use acceleration between images for training. That is usefull. Get acceleration only after doing 1, 2 above. 
+5. [Optional] Separate tracks dataset, because there might be training sequences involving transisiton between tracks. 
+

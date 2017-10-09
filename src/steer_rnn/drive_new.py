@@ -24,7 +24,7 @@ app = Flask(__name__)
 model = None
 
 seq_images = []
-seq_len = 30
+seq_len = 20
 
 class PIDController:
     def __init__(self, Kp, Ki):
@@ -48,7 +48,7 @@ class PIDController:
 
 
 controller = PIDController(0.2, 0.002)
-set_speed = 6
+set_speed = 8
 controller.set_desired(set_speed)
 
 
@@ -68,9 +68,9 @@ def telemetry(sid, data):
         
         if len(seq_images) < seq_len:
             seq_images.append(image_array)
-            throttle = controller.update(float(speed))
+            #throttle = controller.update(float(speed))
             print(steering_angle, throttle)
-            send_control(steering_angle, throttle)
+            send_control(0, 0.5)
         
         else:
             seq_images.pop(0)
@@ -79,11 +79,11 @@ def telemetry(sid, data):
             transformed_image_array = np.array(seq_images)
             transformed_image_array = transformed_image_array[None, :, :, :, :]
 
-            steering_angle = float(model.predict(transformed_image_array, batch_size=1))
+            steering_angle = model.predict(transformed_image_array, batch_size=1)
             throttle = controller.update(float(speed))
 
-            print(steering_angle[-1], throttle)
-            send_control(steering_angle[-1], throttle)
+            print(float(steering_angle[-1, 0]), throttle)
+            send_control(float(steering_angle[-1, 0]), throttle)
 
             # save frame
             if args.image_folder != '':
