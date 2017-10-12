@@ -39,6 +39,9 @@ Still tried to infer the model. Car looses off the track quite early. Moreover, 
 
 I have trained rnn part of steer speed. I don't know how much loss to expect, but the loss is decreasing. One doubt I have to clear is given the output variable range, what loss to expect to judge that loss is close.
 
+
+[10th Oct] I used 43 param network on my dataset, and it works well. This imples some problem with my model. Moreover, there is no augmentation for increasing non-zero steering value images in 43 param network. This network was able to generalize to new track even when no images from new track were used for training. My model needs to first generalize like this.
+
 #ToDo
 1. Clean training data. negative values in between many positive values should be truncated. Use some kernal, to smoothen the variable.
 2. Add training data pertaining to recovery of vehicle when deviated too much. 
