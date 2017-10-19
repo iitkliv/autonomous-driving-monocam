@@ -42,10 +42,16 @@ I have trained rnn part of steer speed. I don't know how much loss to expect, bu
 
 [10th Oct] I used 43 param network on my dataset, and it works well. This imples some problem with my model. Moreover, there is no augmentation for increasing non-zero steering value images in 43 param network. This network was able to generalize to new track even when no images from new track were used for training. My model needs to first generalize like this.
 
+
+
 #ToDo
+Apply rnn to working 160*320 model of steering only
+Stick to it till it runs well, on rnn. This will be used to prove that it performs better
+Make use of generator. Make working models run with same accuracy using generator data.
+ 
 1. Clean training data. negative values in between many positive values should be truncated. Use some kernal, to smoothen the variable.
-2. Add training data pertaining to recovery of vehicle when deviated too much. 
-3. Train CNN RNN of steer only till best results are obtained
+done2. Add training data pertaining to recovery of vehicle when deviated too much. 
+done3. Train CNN RNN of steer only till best results are obtained
 4. Cant train for speed, use acceleration between images for training. That is usefull. Get acceleration only after doing 1, 2 above. 
 5. [Optional] Separate tracks dataset, because there might be training sequences involving transisiton between tracks. 
 
